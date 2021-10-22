@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Yasser/AndroidStudioProjects/NoteAppCleanArchitecture/app/src/main/res/layout/activity_main.xml" value="0.29010416666666666" />
+        <entry key="..\:/Users/Yasser/AndroidStudioProjects/NoteAppCleanArchitecture/app/src/main/res/layout/fragment_list_notes.xml" value="0.2826086956521739" />
+        <entry key="..\:/Users/Yasser/AndroidStudioProjects/NoteAppCleanArchitecture/app/src/main/res/layout/fragment_note.xml" value="0.2826086956521739" />
       </map>
     </option>
   </component>
