@@ -2,7 +2,6 @@ package com.yasserakbbach.noteappcleanarchitecture.framework
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
 import com.yasserakbbach.core.data.Note
 import com.yasserakbbach.core.repository.NoteRepository
 import com.yasserakbbach.core.usecase.AddNote
@@ -12,7 +11,6 @@ import com.yasserakbbach.core.usecase.RemoveNote
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class NoteViewModel(application: Application) : AndroidViewModel(application) {
@@ -26,11 +24,20 @@ class NoteViewModel(application: Application) : AndroidViewModel(application) {
         RemoveNote(repository)
     )
     val saved = MutableSharedFlow<Boolean>()
+    val currentNote = MutableSharedFlow<Note?>()
 
     fun saveNote(note : Note) {
         coroutineScope.launch {
             useCases.addNote(note)
             saved.emit(true)
+        }
+    }
+
+    fun getNote(id: Long) {
+        coroutineScope.launch {
+            useCases.getNote(id)?.let {
+                currentNote.emit(it)
+            }
         }
     }
 }

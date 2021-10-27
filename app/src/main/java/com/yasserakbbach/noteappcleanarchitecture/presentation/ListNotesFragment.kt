@@ -16,14 +16,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class ListNotesFragment : Fragment() {
+class ListNotesFragment : Fragment(), ListAction {
 
     private val viewModel : ListNotesViewModel by viewModels()
     private var _binding : FragmentListNotesBinding? = null
     private val binding get() = _binding!!
 
     private val notesAdapter : ListNotesAdapter by lazy {
-        ListNotesAdapter()
+        ListNotesAdapter(this)
     }
 
     override fun onCreateView(
@@ -77,5 +77,9 @@ class ListNotesFragment : Fragment() {
 
     private fun toggleLoader(hide : Boolean) = lifecycleScope.launch(Dispatchers.Main) {
         binding.loading.visibility = if(hide) View.GONE else View.VISIBLE
+    }
+
+    override fun onClick(id: Long) {
+        goToNoteDetails(id)
     }
 }

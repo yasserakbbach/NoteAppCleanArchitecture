@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.yasserakbbach.core.data.Note
 import com.yasserakbbach.noteappcleanarchitecture.databinding.FragmentNoteBinding
 import com.yasserakbbach.noteappcleanarchitecture.framework.NoteViewModel
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.collectLatest
 class NoteFragment : Fragment() {
 
     private val viewModel : NoteViewModel by viewModels()
+    private val args: NoteFragmentArgs by navArgs()
     private var mNote = Note(0L, "", "", 0L, 0L)
 
     private var _binding : FragmentNoteBinding? = null
@@ -41,6 +43,7 @@ class NoteFragment : Fragment() {
             saveOrAddNote()
         }
         observeSavedNote()
+        observePassedNote()
     }
 
     override fun onDestroyView() {
@@ -86,6 +89,24 @@ class NoteFragment : Fragment() {
             }else {
 
                 Toast.makeText(requireContext(), "Error occurred!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun observePassedNote() = lifecycleScope.launchWhenCreated {
+
+        val noteId = args.noteId
+        if(noteId != 0L) {
+            viewModel.getNote(noteId)
+
+            viewModel.currentNote.collectLatest {
+                it?.let { note ->
+                    mNote = note
+                    binding.apply {
+                        title.setText(mNote.title)
+                        content.setText(mNote.content)
+                    }
+                }
             }
         }
     }

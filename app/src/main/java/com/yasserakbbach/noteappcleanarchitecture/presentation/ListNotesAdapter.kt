@@ -11,7 +11,7 @@ import com.yasserakbbach.noteappcleanarchitecture.databinding.ItemNoteBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ListNotesAdapter : ListAdapter<Note, ListNotesAdapter.NoteViewHolder>(NoteComparator()) {
+class ListNotesAdapter(val actions: ListAction) : ListAdapter<Note, ListNotesAdapter.NoteViewHolder>(NoteComparator()) {
 
     inner class NoteViewHolder(private val itemNoteBinding: ItemNoteBinding) : RecyclerView.ViewHolder(itemNoteBinding.root) {
 
@@ -25,6 +25,9 @@ class ListNotesAdapter : ListAdapter<Note, ListNotesAdapter.NoteViewHolder>(Note
                         SimpleDateFormat("MMM dd, HH:mm:ss", Locale.ENGLISH).format(Date(note.updateTime))
                     )
                 date.text = lastUpdate
+                root.setOnClickListener {
+                    actions.onClick(note.id)
+                }
             }
         }
     }
