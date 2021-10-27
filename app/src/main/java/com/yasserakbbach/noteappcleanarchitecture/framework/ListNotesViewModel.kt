@@ -27,6 +27,10 @@ class ListNotesViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun loadNotes() = viewModelScope.launch(Dispatchers.IO) {
 
-        notes.emit(useCases.getAllNotes())
+        val notesList = useCases.getAllNotes()
+        notesList.forEach {
+            it.wordCount = useCases.wordCount(it)
+        }
+        notes.emit(notesList)
     }
 }

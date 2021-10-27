@@ -11,4 +11,5 @@
     <string name="prompt_note_deletion">Do you really wanna delete this note?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="words_count">Words: %d</string>
 </resources>

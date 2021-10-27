@@ -17,14 +17,16 @@ class ListNotesAdapter(val actions: ListAction) : ListAdapter<Note, ListNotesAda
 
         fun bind(note: Note) {
 
+            val context = itemNoteBinding.root.context
             itemNoteBinding.apply {
                 title.text = note.title
                 content.text = note.content
-                val lastUpdate = itemNoteBinding.root.context.getString(
+                val lastUpdate = context.getString(
                         R.string.last_update,
                         SimpleDateFormat("MMM dd, HH:mm:ss", Locale.ENGLISH).format(Date(note.updateTime))
                     )
                 date.text = lastUpdate
+                wordCount.text = context.getString(R.string.words_count, note.wordCount)
                 root.setOnClickListener {
                     actions.onClick(note.id)
                 }

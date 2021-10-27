@@ -1,10 +1,7 @@
 package com.yasserakbbach.noteappcleanarchitecture.framework.di
 
 import com.yasserakbbach.core.repository.NoteRepository
-import com.yasserakbbach.core.usecase.AddNote
-import com.yasserakbbach.core.usecase.GetAllNotes
-import com.yasserakbbach.core.usecase.GetNote
-import com.yasserakbbach.core.usecase.RemoveNote
+import com.yasserakbbach.core.usecase.*
 import com.yasserakbbach.noteappcleanarchitecture.framework.UseCases
 import dagger.Module
 import dagger.Provides
@@ -17,6 +14,7 @@ class UseCasesModule {
         AddNote(repository),
         GetAllNotes(repository),
         GetNote(repository),
-        RemoveNote(repository)
+        RemoveNote(repository),
+        GetWordCount()
     )
 }
