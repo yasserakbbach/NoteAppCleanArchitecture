@@ -7,4 +7,8 @@
     <string name="content">Content</string>
     <string name="save_note">Save note</string>
     <string name="last_update">Last update: %s</string>
+    <string name="delete">Delete</string>
+    <string name="prompt_note_deletion">Do you really wanna delete this note?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

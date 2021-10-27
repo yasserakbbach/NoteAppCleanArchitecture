@@ -1,16 +1,16 @@
 package com.yasserakbbach.noteappcleanarchitecture.presentation
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.yasserakbbach.core.data.Note
+import com.yasserakbbach.noteappcleanarchitecture.R
 import com.yasserakbbach.noteappcleanarchitecture.databinding.FragmentNoteBinding
 import com.yasserakbbach.noteappcleanarchitecture.framework.NoteViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -26,6 +26,7 @@ class NoteFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -50,6 +51,21 @@ class NoteFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.note_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) =
+        when(item.itemId) {
+
+            R.id.deleteNote -> {
+                promptNoteDeletion()
+                true
+            }
+            else -> true
+        }
 
     private fun saveOrAddNote() {
 
@@ -109,5 +125,22 @@ class NoteFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun promptNoteDeletion() {
+
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.prompt_note_deletion))
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                deleteNote()
+            }
+            .setNegativeButton(getString(R.string.no), null)
+            .create()
+            .show()
+    }
+
+    private fun deleteNote() = lifecycleScope.launchWhenCreated {
+        viewModel.deleteNote(mNote)
+        findNavController().navigateUp()
     }
 }
