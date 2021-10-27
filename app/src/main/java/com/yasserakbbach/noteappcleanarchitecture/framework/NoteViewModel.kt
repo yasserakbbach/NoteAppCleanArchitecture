@@ -3,26 +3,28 @@ package com.yasserakbbach.noteappcleanarchitecture.framework
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.yasserakbbach.core.data.Note
-import com.yasserakbbach.core.repository.NoteRepository
-import com.yasserakbbach.core.usecase.AddNote
-import com.yasserakbbach.core.usecase.GetAllNotes
-import com.yasserakbbach.core.usecase.GetNote
-import com.yasserakbbach.core.usecase.RemoveNote
+import com.yasserakbbach.noteappcleanarchitecture.framework.di.ApplicationModule
+import com.yasserakbbach.noteappcleanarchitecture.framework.di.DaggerViewModelComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class NoteViewModel(application: Application) : AndroidViewModel(application) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
-    private val repository = NoteRepository(RoomNoteDataSource(application))
-    private val useCases = UseCases(
-        AddNote(repository),
-        GetAllNotes(repository),
-        GetNote(repository),
-        RemoveNote(repository)
-    )
+
+    @Inject
+    lateinit var useCases : UseCases
+
+    init {
+        DaggerViewModelComponent.builder()
+            .applicationModule(ApplicationModule(application))
+            .build()
+            .inject(this)
+    }
+
     val saved = MutableSharedFlow<Boolean>()
     val currentNote = MutableSharedFlow<Note?>()
 

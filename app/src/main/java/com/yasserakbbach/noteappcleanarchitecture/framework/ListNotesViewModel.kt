@@ -4,24 +4,25 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.yasserakbbach.core.data.Note
-import com.yasserakbbach.core.repository.NoteRepository
-import com.yasserakbbach.core.usecase.AddNote
-import com.yasserakbbach.core.usecase.GetAllNotes
-import com.yasserakbbach.core.usecase.GetNote
-import com.yasserakbbach.core.usecase.RemoveNote
+import com.yasserakbbach.noteappcleanarchitecture.framework.di.ApplicationModule
+import com.yasserakbbach.noteappcleanarchitecture.framework.di.DaggerViewModelComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class ListNotesViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = NoteRepository(RoomNoteDataSource(application))
-    private val useCases = UseCases(
-        addNote = AddNote(repository),
-        getAllNotes = GetAllNotes(repository),
-        getNote = GetNote(repository),
-        removeNote = RemoveNote(repository)
-    )
+    @Inject
+    lateinit var useCases : UseCases
+
+    init {
+        DaggerViewModelComponent.builder()
+            .applicationModule(ApplicationModule(application))
+            .build()
+            .inject(this)
+    }
+
     val notes = MutableSharedFlow<List<Note>>()
 
     fun loadNotes() = viewModelScope.launch(Dispatchers.IO) {
